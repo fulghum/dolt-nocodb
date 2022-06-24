@@ -4,9 +4,14 @@ FROM golang:alpine as builder
 RUN apk update
 RUN apk add git
 
-RUN git clone https://github.com/dolthub/dolt.git /var/dolt &&\
-        cd /var/dolt/go &&\
-        go install ./cmd/dolt
+RUN git clone https://github.com/dolthub/dolt.git /var/dolt
+RUN cd /var/dolt/go && echo "replace github.com/dolthub/go-mysql-server => /var/go-mysql-server" >> go.mod
+
+RUN git clone https://github.com/dolthub/go-mysql-server.git /var/go-mysql-server
+RUN cd /var/go-mysql-server && git checkout fulghum/nocodb-testing
+
+RUN cd /var/dolt/go && go install ./cmd/dolt
+
 
 # ----------------------------------------------------------------------------
 
@@ -18,7 +23,7 @@ ENV PATH="/bin:$PATH"
 # Set default variables
 ENV DOLT_HOST="0.0.0.0"
 ENV DOLT_PORT=3306
-ENV DOLT_LOGLEVEL="info"
+ENV DOLT_LOGLEVEL="debug"
 ENV DOLT_DB="doltdb"
 ENV DOLT_ROOT_USER="root"
 ENV DOLT_ROOT_PASSWORD="root"
