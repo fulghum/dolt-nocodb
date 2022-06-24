@@ -5,7 +5,6 @@ services:
       - "${DOLT_PORT:-3306}:${DOLT_PORT:-3306}"
     expose:
       - "${DOLT_PORT:-3306}"
-    env_file: .env
   nocodb:
     depends_on:
       - dolt_db
@@ -15,4 +14,3 @@ services:
     restart: always
     environment:
       NC_DB: "mysql2://dolt_db:${DOLT_PORT:-3306}?u=${DOLT_ROOT_USER:-root}&p=${DOLT_ROOT_PASSWORD:-root}&d=${DOLT_DB:-doltdb}"
-    env_file: .env
