@@ -5,13 +5,7 @@ RUN apk update
 RUN apk add git
 
 RUN git clone https://github.com/dolthub/dolt.git /var/dolt
-RUN cd /var/dolt/go && echo "replace github.com/dolthub/go-mysql-server => /var/go-mysql-server" >> go.mod
-
-RUN git clone https://github.com/dolthub/go-mysql-server.git /var/go-mysql-server
-RUN cd /var/go-mysql-server && git checkout fulghum/alterpk-panic
-
 RUN cd /var/dolt/go && go install ./cmd/dolt
-
 
 # ----------------------------------------------------------------------------
 
